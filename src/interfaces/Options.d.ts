@@ -1,3 +1,4 @@
+import { OverlayType } from '../enum/OverlayType';
 import { ScaleControlOptions } from '../controls/ScaleControl';
 import { GeolocationControlOptions } from '../controls/GeoControl';
 import { OverviewMapControlOptions } from '../controls/OverviewMapControl';
@@ -12,6 +13,17 @@ export interface MarkerOptions {
     content?: string;
     enableMessage?: boolean;
     autoDisplayInfoWindow?: boolean;
+    label?: MarkerLabelOptions;
+}
+export interface MarkerLabelOptions {
+    title: string;
+    opts?: any;
+    style?: any;
+}
+export interface OverlayOptions {
+    type: OverlayType;
+    opts: any;
+    style?: any;
 }
 export interface MapDefaultOptions {
     navCtrl?: boolean | NavigationControlOptions;
@@ -20,6 +32,7 @@ export interface MapDefaultOptions {
     enableScrollWheelZoom?: boolean;
     geolocationCtrl?: boolean | GeolocationControlOptions;
     zoom?: number;
+    overlays?: Array<OverlayOptions>;
 }
 export interface MapOptions extends MapDefaultOptions {
     center: {

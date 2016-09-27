@@ -32,10 +32,9 @@ import {BaiduMap, OfflineOptions, ControlAnchor, NavigationControlType} from 'an
             height: 400px;
             display: block;
         }
-    `],
-    directives: [BaiduMap]
+    `]
 })
-export class MainApp implements OnInit {
+export class MapComponent implements OnInit {
 
     opts: any;
     offlineOpts: OfflineOptions;
@@ -84,9 +83,34 @@ export class MainApp implements OnInit {
 
 }
 ```
+```javascript
+    import { NgModule }      from '@angular/core';
+    import { BrowserModule } from '@angular/platform-browser';
 
+    import { BaiduMap } from 'angular2-baidu-map';
+    import { MapComponent } from './demo.app'
+    @NgModule({
+        imports: [
+            BrowserModule,
+        ],
+        declarations: [
+            BaiduMap,
+            MainApp
+        ],
+        bootstrap:[
+            MapComponent
+        ]
+    })
+    export class DemoModule {}
+```
 For more information, see [documentation](http://leftstick.github.io/angular2-baidu-map/)
 
+## FEATURE ##
+
+### 更新至angular 2 正式版(2.0.0)
+### 增加marker label扩展(图标上显示文字)
+### 增加Overlay扩展(支持marker,polyline,circle,polygon,rectangle)
+### 详细见demo
 
 ## LICENSE ##
 

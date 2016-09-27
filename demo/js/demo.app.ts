@@ -1,7 +1,7 @@
 'use strict';
 
 import { Component, Input, OnInit, AfterContentInit } from '@angular/core';
-import { BaiduMap, OfflineOptions, ControlAnchor, NavigationControlType } from '../../';
+import { BaiduMap, OfflineOptions, ControlAnchor, NavigationControlType,OverlayType } from '../../src';
 
 var tpl = <string>require('./demo.app.tpl');
 var style = <string>require('./demo.app.style');
@@ -23,7 +23,25 @@ var markers1 = [{
     latitude: 31.245554,
     title: 'Where',
     content: 'Put description here',
-    autoDisplayInfoWindow: true
+    autoDisplayInfoWindow: true,
+    label:{
+        title:'1',
+        opts:{
+            postion:{
+                longitude: 121.506191,
+                latitude: 31.245554,
+            },
+            offset:{
+                width:5,
+                height:3
+            }
+        },
+        style:{
+            "color":"white",
+            "border":"none",
+            "background":"none"
+        }
+    }
 }];
 
 var markers2 = [{
@@ -34,8 +52,7 @@ var markers2 = [{
 @Component({
     selector: 'map-presentation',
     template: tpl,
-    styles: [style],
-    directives: [BaiduMap]
+    styles: [style]
 })
 export class MainApp implements OnInit, AfterContentInit {
 
@@ -61,7 +78,95 @@ export class MainApp implements OnInit, AfterContentInit {
             },
             navCtrl: {
                 type: NavigationControlType.BMAP_NAVIGATION_CONTROL_LARGE
-            }
+            },
+            overlays:[
+                {
+                    type:OverlayType.BMAP_OVERLAY_POLYLINE,
+                    opts:[
+                        {
+                            longitude: 121.506191,
+                            latitude: 31.245554
+                        },
+                        {
+                            longitude:121.503535,
+                            latitude:31.245053
+                        },
+                        {
+                            longitude: 121.500885,
+                            latitude: 31.190032
+                        }
+                    ]
+                },
+                {
+                    type:OverlayType.BMAP_OVERLAY_MARKER,
+                    opts:[
+                        {
+                            longitude: 121.500885,
+                            latitude: 31.190032
+                        }
+                    ]
+                },
+                {
+                    type:OverlayType.BMAP_OVERLAY_CIRCLE,
+                    opts:[
+                        {
+                            longitude: 121.506191,
+                            latitude: 31.245554,
+                            radius:100//半径
+                        }
+                    ],
+                    style:{
+                        strokeColor:"blue",//边线颜色
+                        strokeWeight:2,//宽度
+                        strokeOpacity:0.5//透明度
+                    }
+                },{
+                    type:OverlayType.BMAP_OVERLAY_POLYGON,
+                    opts:[
+                        {
+                            longitude:121.502583,
+                            latitude:31.245368
+                        },
+                        {
+                            longitude:121.504343,
+                            latitude:31.245275
+                        },
+                        {
+                            longitude:121.502762,
+                            latitude:31.244549
+                        },
+                        {
+                            longitude:121.504424,
+                            latitude:31.244573
+                        }
+                    ]
+                },{
+                    type:OverlayType.BMAP_OVERLAY_RECTANGLE,
+                    opts:[
+                        {
+                            longitude:121.502583,
+                            latitude:31.245368
+                        },
+                        {
+                            longitude:121.504343,
+                            latitude:31.245275
+                        },
+                        {
+                            longitude:121.504343,
+                            latitude:31.245275
+                        },
+                        {
+                            longitude:121.504424,
+                            latitude:31.244573
+                        }
+                    ],
+                    style:{
+                        strokeColor:"red",//边线颜色
+                        strokeWeight:2,//宽度
+                        strokeOpacity:0.5//透明度
+                    }
+                }
+            ]
         };
 
         this.offlineOpts = {

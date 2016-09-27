@@ -26,5 +26,6 @@ export { NavigationControlOptions } from './controls/NavigationControl';
 export { Icon } from './interfaces/Icon';
 export { Size } from './interfaces/Size';
 export { ControlAnchor } from './enum/ControlAnchor';
+export { OverlayType } from './enum/OverlayType';
 export * from './enum/NavigationControlType';
 export { MapStatus } from './enum/MapStatus';

@@ -1,15 +1,14 @@
 import 'es6-shim';
 import 'reflect-metadata';
 import 'zone.js/dist/zone';
-import {bootstrap} from '@angular/platform-browser-dynamic';
-import {MainApp} from './demo.app';
-import {enableProdMode} from '@angular/core';
+import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
+import {DemoModule} from './demo.module';
 import {Splash} from 'splash-screen';
 
 class App {
 
     constructor() {
-        enableProdMode();
+    
     }
 
     destroySplash(): void {
@@ -24,7 +23,7 @@ class App {
     }
 
     launch() {
-        bootstrap(MainApp);
+        platformBrowserDynamic().bootstrapModule(DemoModule);
     }
 
     run(): void {

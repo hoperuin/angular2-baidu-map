@@ -1,10 +1,12 @@
-import {MapOptions, MarkerOptions} from './interfaces/Options';
+import {MapOptions, MarkerOptions,OverlayOptions} from './interfaces/Options';
 import {PreviousMarker} from './interfaces/PreviousMarker';
 
 import {setGeoCtrl} from './controls/GeoControl';
 import {setScaleCtrl} from './controls/ScaleControl';
 import {setOverviewMapCtrl} from './controls/OverviewMapControl';
 import {setNavigationCtrl} from './controls/NavigationControl';
+
+import {OverlayType} from './enum/OverlayType';
 
 export const reCenter = function(map: any, opts: MapOptions) {
     var BMap: any = (<any>window)['BMap'];
@@ -35,16 +37,72 @@ export const createInstance = function(opts: MapOptions, element: any) {
         map.enableScrollWheelZoom();
     }
     setGeoCtrl(map, opts);
+    createOverlay(map,opts);
     return map;
 };
+
+export const createOverlay = function(map: any,opts:MapOptions){
+    var BMap: any = (<any>window)['BMap'];
+    if(opts.overlays){
+        opts.overlays.forEach(function(overlay:OverlayOptions){
+            if(overlay.type === OverlayType.BMAP_OVERLAY_POLYLINE ){
+                var paths = Array<any>()
+                overlay.opts.forEach(function(polyline:any){
+                    var pt = new BMap.Point(polyline.longitude,polyline.latitude);
+                    paths.push(pt);
+                });
+                var polyline = new BMap.Polyline(paths,overlay.style);
+                map.addOverlay(polyline);    
+            }else 
+            if(overlay.type == OverlayType.BMAP_OVERLAY_MARKER){
+                overlay.opts.forEach(function(marker:any){
+                    var marker = new BMap.Marker(new BMap.Point(marker.longitude, marker.latitude));
+                    map.addOverlay(marker);
+                });
+            }else
+            if(overlay.type == OverlayType.BMAP_OVERLAY_CIRCLE){
+                overlay.opts.forEach(function(circle:any){
+                    var circle = new BMap.Circle(new BMap.Point(circle.longitude,circle.latitude),circle.radius,overlay.style);
+                    map.addOverlay(circle);
+                });
+            }else
+            if(overlay.type == OverlayType.BMAP_OVERLAY_POLYGON || overlay.type == OverlayType.BMAP_OVERLAY_RECTANGLE){
+                var paths = Array<any>()
+                overlay.opts.forEach(function(opt:any){
+                    var pt = new BMap.Point(opt.longitude,opt.latitude);
+                    paths.push(pt);
+                });
+                var polygon = new BMap.Polygon(paths,overlay.style);
+                polygon.setPath(paths);
+                map.addOverlay(polygon);
+            }
+        });
+    }
+}
 
 export const createMarker = function(marker: MarkerOptions, pt: any) {
     var BMap: any = (<any>window)['BMap'];
     if (marker.icon) {
+        var mk = new BMap.Marker(pt, { icon: icon });
         var icon = new BMap.Icon(marker.icon, new BMap.Size(marker.width, marker.height));
-        return new BMap.Marker(pt, { icon: icon });
+        if(marker.label){
+            var label = new BMap.Label(marker.label.title,marker.label.opts);
+            if(marker.label.style){
+                label.setStyle(marker.label.style)
+            }
+            mk.setLabel(label);
+        }
+        return mk;
     }
-    return new BMap.Marker(pt);
+    var mk2 = new BMap.Marker(pt);
+    if(marker.label){
+        var label = new BMap.Label(marker.label.title,marker.label.opts);
+        if(marker.label.style){
+            label.setStyle(marker.label.style)
+        }
+        mk2.setLabel(label);
+    }
+    return mk2;
 
 };
 

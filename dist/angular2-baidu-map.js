@@ -135,9 +135,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return BaiduMap;
 	}());
 	exports.BaiduMap = BaiduMap;
-	var ControlAnchor_1 = __webpack_require__(10);
+	var ControlAnchor_1 = __webpack_require__(11);
 	exports.ControlAnchor = ControlAnchor_1.ControlAnchor;
-	__export(__webpack_require__(11));
+	var OverlayType_1 = __webpack_require__(10);
+	exports.OverlayType = OverlayType_1.OverlayType;
+	__export(__webpack_require__(12));
 	var MapStatus_2 = __webpack_require__(2);
 	exports.MapStatus = MapStatus_2.MapStatus;
 
@@ -232,6 +234,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var ScaleControl_1 = __webpack_require__(7);
 	var OverviewMapControl_1 = __webpack_require__(8);
 	var NavigationControl_1 = __webpack_require__(9);
+	var OverlayType_1 = __webpack_require__(10);
 	exports.reCenter = function (map, opts) {
 	    var BMap = window['BMap'];
 	    if (opts.center) {
@@ -254,15 +257,70 @@ return /******/ (function(modules) { // webpackBootstrap
 	        map.enableScrollWheelZoom();
 	    }
 	    GeoControl_1.setGeoCtrl(map, opts);
+	    exports.createOverlay(map, opts);
 	    return map;
+	};
+	exports.createOverlay = function (map, opts) {
+	    var BMap = window['BMap'];
+	    if (opts.overlays) {
+	        opts.overlays.forEach(function (overlay) {
+	            if (overlay.type === OverlayType_1.OverlayType.BMAP_OVERLAY_POLYLINE) {
+	                var paths = Array();
+	                overlay.opts.forEach(function (polyline) {
+	                    var pt = new BMap.Point(polyline.longitude, polyline.latitude);
+	                    paths.push(pt);
+	                });
+	                var polyline = new BMap.Polyline(paths, overlay.style);
+	                map.addOverlay(polyline);
+	            }
+	            else if (overlay.type == OverlayType_1.OverlayType.BMAP_OVERLAY_MARKER) {
+	                overlay.opts.forEach(function (marker) {
+	                    var marker = new BMap.Marker(new BMap.Point(marker.longitude, marker.latitude));
+	                    map.addOverlay(marker);
+	                });
+	            }
+	            else if (overlay.type == OverlayType_1.OverlayType.BMAP_OVERLAY_CIRCLE) {
+	                overlay.opts.forEach(function (circle) {
+	                    var circle = new BMap.Circle(new BMap.Point(circle.longitude, circle.latitude), circle.radius, overlay.style);
+	                    map.addOverlay(circle);
+	                });
+	            }
+	            else if (overlay.type == OverlayType_1.OverlayType.BMAP_OVERLAY_POLYGON || overlay.type == OverlayType_1.OverlayType.BMAP_OVERLAY_RECTANGLE) {
+	                var paths = Array();
+	                overlay.opts.forEach(function (opt) {
+	                    var pt = new BMap.Point(opt.longitude, opt.latitude);
+	                    paths.push(pt);
+	                });
+	                var polygon = new BMap.Polygon(paths, overlay.style);
+	                polygon.setPath(paths);
+	                map.addOverlay(polygon);
+	            }
+	        });
+	    }
 	};
 	exports.createMarker = function (marker, pt) {
 	    var BMap = window['BMap'];
 	    if (marker.icon) {
+	        var mk = new BMap.Marker(pt, { icon: icon });
 	        var icon = new BMap.Icon(marker.icon, new BMap.Size(marker.width, marker.height));
-	        return new BMap.Marker(pt, { icon: icon });
+	        if (marker.label) {
+	            var label = new BMap.Label(marker.label.title, marker.label.opts);
+	            if (marker.label.style) {
+	                label.setStyle(marker.label.style);
+	            }
+	            mk.setLabel(label);
+	        }
+	        return mk;
 	    }
-	    return new BMap.Marker(pt);
+	    var mk2 = new BMap.Marker(pt);
+	    if (marker.label) {
+	        var label = new BMap.Label(marker.label.title, marker.label.opts);
+	        if (marker.label.style) {
+	            label.setStyle(marker.label.style);
+	        }
+	        mk2.setLabel(label);
+	    }
+	    return mk2;
 	};
 	exports.redrawMarkers = function (map, previousMarkers, opts) {
 	    var BMap = window['BMap'];
@@ -432,6 +490,21 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports) {
 
 	"use strict";
+	(function (OverlayType) {
+	    OverlayType[OverlayType["BMAP_OVERLAY_MARKER"] = 0] = "BMAP_OVERLAY_MARKER";
+	    OverlayType[OverlayType["BMAP_OVERLAY_POLYLINE"] = 1] = "BMAP_OVERLAY_POLYLINE";
+	    OverlayType[OverlayType["BMAP_OVERLAY_CIRCLE"] = 2] = "BMAP_OVERLAY_CIRCLE";
+	    OverlayType[OverlayType["BMAP_OVERLAY_POLYGON"] = 3] = "BMAP_OVERLAY_POLYGON";
+	    OverlayType[OverlayType["BMAP_OVERLAY_RECTANGLE"] = 4] = "BMAP_OVERLAY_RECTANGLE";
+	})(exports.OverlayType || (exports.OverlayType = {}));
+	var OverlayType = exports.OverlayType;
+
+
+/***/ },
+/* 11 */
+/***/ function(module, exports) {
+
+	"use strict";
 	(function (ControlAnchor) {
 	    ControlAnchor[ControlAnchor["BMAP_ANCHOR_TOP_LEFT"] = 0] = "BMAP_ANCHOR_TOP_LEFT";
 	    ControlAnchor[ControlAnchor["BMAP_ANCHOR_TOP_RIGHT"] = 1] = "BMAP_ANCHOR_TOP_RIGHT";
@@ -442,7 +515,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 11 */
+/* 12 */
 /***/ function(module, exports) {
 
 	"use strict";
