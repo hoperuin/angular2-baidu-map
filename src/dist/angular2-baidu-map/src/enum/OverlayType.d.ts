@@ -1,0 +1,7 @@
+export declare enum OverlayType {
+    BMAP_OVERLAY_MARKER = 0,
+    BMAP_OVERLAY_POLYLINE = 1,
+    BMAP_OVERLAY_CIRCLE = 2,
+    BMAP_OVERLAY_POLYGON = 3,
+    BMAP_OVERLAY_RECTANGLE = 4,
+}

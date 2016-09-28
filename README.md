@@ -11,7 +11,7 @@ Angular2 component for Baidu map
 ## Install via npm ##
 
 ```bash
-npm install angular2-baidu-map
+npm install https://github.com/hoperuin/angular2-baidu-map.git
 ```
 
 ## Usage ##
