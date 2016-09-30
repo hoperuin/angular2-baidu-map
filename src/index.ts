@@ -7,7 +7,7 @@ import { MapStatus } from './enum/MapStatus';
 import { defaultOfflineOpts, defaultOpts } from './defaults';
 
 import { loader } from './Loader';
-import { reCenter, reZoom, redrawMarkers, createInstance } from './CoreOperations';
+import { reCenter, reZoom, redrawMarkers, createInstance,createOverlay } from './CoreOperations';
 
 @Component({
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -65,6 +65,7 @@ export class BaiduMap implements OnInit, OnChanges {
         reCenter(this.map, opts);
         reZoom(this.map, opts);
         redrawMarkers.bind(this)(this.map, this.previousMarkers, opts);
+        createOverlay(this.map,opts);
     }
 
     _draw() {
