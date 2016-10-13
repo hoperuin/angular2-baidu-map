@@ -96,6 +96,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        CoreOperations_1.reCenter(this.map, opts);
 	        CoreOperations_1.reZoom(this.map, opts);
 	        CoreOperations_1.redrawMarkers.bind(this)(this.map, this.previousMarkers, opts);
+	        CoreOperations_1.createOverlay(this.map, opts);
 	    };
 	    BaiduMap.prototype._draw = function () {
 	        var options = Object.assign({}, defaults_1.defaultOpts, this.options);
@@ -301,8 +302,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.createMarker = function (marker, pt) {
 	    var BMap = window['BMap'];
 	    if (marker.icon) {
-	        var mk = new BMap.Marker(pt, { icon: icon });
 	        var icon = new BMap.Icon(marker.icon, new BMap.Size(marker.width, marker.height));
+	        var mk = new BMap.Marker(pt, { icon: icon });
 	        if (marker.label) {
 	            var label = new BMap.Label(marker.label.title, marker.label.opts);
 	            if (marker.label.style) {
